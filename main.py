@@ -14,3 +14,4 @@ app = FastAPI(
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok its really good"}
+print("Test a Pull Request")
