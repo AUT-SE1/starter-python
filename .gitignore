@@ -10,3 +10,8 @@ Thumbs.db
 .venv/
 __pycache__/
 *.py[cod]
+
+# Test and coverage output
+.coverage
+htmlcov/
+.pytest_cache/
