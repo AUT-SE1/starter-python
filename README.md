@@ -203,6 +203,53 @@ make contract-test NEIGHBOR_BASE_URL=http://127.0.0.1:8081
 
 `NEIGHBOR_REPO` may also be a local path to their cloned repository.
 
+### On Windows
+
+`make` is not installed on Windows by default, so every `make` command above has
+a plain equivalent. Run these from the repository root.
+
+| Instead of | Run |
+|---|---|
+| `make run` | `python -m uvicorn main:app --host 0.0.0.0 --port 8080` |
+| `make test` | `python -m pytest` |
+| `make coverage` | `python -m pytest --cov=. --cov-report=html` |
+
+**The contract test needs the address in an environment variable**, and the
+`VAR=value command` form in the examples above is Unix shell syntax that does
+not work in Windows. Set the variable on its own line first.
+
+In Command Prompt:
+
+```bat
+set NEIGHBOR_BASE_URL=http://10.0.0.42:8080
+python -m pytest tests/contract -v -s
+```
+
+In PowerShell:
+
+```powershell
+$env:NEIGHBOR_BASE_URL = "http://10.0.0.42:8080"
+python -m pytest tests/contract -v -s
+```
+
+The variable lasts only as long as that terminal window, so set it again in a
+new one.
+
+**Find the address to give your neighbour** with `ipconfig`, and read the IPv4
+address of the adapter you are actually connected through — usually "Wireless
+LAN adapter Wi-Fi".
+
+**If they still cannot reach you**, Windows Defender Firewall is the usual
+reason. In a PowerShell window opened as Administrator:
+
+```powershell
+New-NetFirewallRule -DisplayName "SE Lab 8080" -Direction Inbound `
+  -LocalPort 8080 -Protocol TCP -Action Allow
+```
+
+Remove it after the session with
+`Remove-NetFirewallRule -DisplayName "SE Lab 8080"`.
+
 ### Files added for this session
 
 - `orders.py`: order validation and the in-memory store — the logic under unit test.
