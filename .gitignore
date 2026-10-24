@@ -23,3 +23,8 @@ htmlcov/
 
 # Previous generated-output location (includes a currently locked Word file)
 /deliverables/
+
+# Test and coverage output
+.coverage
+htmlcov/
+.pytest_cache/
