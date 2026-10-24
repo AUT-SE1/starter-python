@@ -29,7 +29,7 @@ coverage:
 contract-test:
 	@test -n "$(NEIGHBOR_BASE_URL)" || \
 		{ echo "Set NEIGHBOR_BASE_URL, e.g. make contract-test NEIGHBOR_BASE_URL=http://10.0.0.42:8080"; exit 1; }
-	NEIGHBOR_BASE_URL=$(NEIGHBOR_BASE_URL) python -m pytest tests/contract -v -s
+	NEIGHBOR_BASE_URL=$(NEIGHBOR_BASE_URL) python -m pytest tests/contract -v -s --tb=short
 
 sandbox:
 	docker compose up --build -d
