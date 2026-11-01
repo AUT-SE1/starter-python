@@ -1,0 +1,44 @@
+import { render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import App from './App'
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+  window.history.replaceState(null, '', '/')
+})
+
+describe('صفحه‌ی /health', () => {
+  it('با پاسخ ۲۰۰ بک‌اند، پیام موفقیت را نشان می‌دهد', async () => {
+    window.history.replaceState(null, '', '/health')
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ status: 'UP', service: 's4-rsk' }),
+      }),
+    )
+
+    render(<App />)
+
+    expect(await screen.findByText(/بک‌اند در دسترس است/)).toBeInTheDocument()
+    expect(screen.getByText(/"service": "s4-rsk"/)).toBeInTheDocument()
+  })
+
+  it('اگر بک‌اند خطا بدهد، پیام خطا را نشان می‌دهد', async () => {
+    window.history.replaceState(null, '', '/health')
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Failed to fetch')))
+
+    render(<App />)
+
+    expect(await screen.findByText(/خطا: Failed to fetch/)).toBeInTheDocument()
+  })
+
+  it('آدرس ناشناخته صفحه‌ی ۴۰۴ را نشان می‌دهد', () => {
+    window.history.replaceState(null, '', '/abc')
+
+    render(<App />)
+
+    expect(screen.getByText('۴۰۴')).toBeInTheDocument()
+  })
+})
